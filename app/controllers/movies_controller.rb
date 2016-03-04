@@ -7,12 +7,13 @@ class MoviesController < ApplicationController
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
-    # will render app/views/movies/show.<extension> by default
   end
 
   def index
-    #@movies = Movie.all
-    @q = Movie.all.search params[:q]
+    movie = Movie
+    movie = movie.where('rating in (?)', params[:ratings].keys) if params[:ratings]
+  
+    @q = movie.search params[:q]
     @movies = @q.result(:distinct => true)
     @all_ratings=Movie::RATINGS 
   end

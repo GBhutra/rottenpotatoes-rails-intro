@@ -1,21 +1,22 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
 
-= form_tag movies_path, :method => :get do
+= form_tag movies_path,:id => 'ratings_form',:method => :get do
   Include:
+  = (hidden_field_tag 'q[s]', params[:q][:s]) if params[:q] && params[:q][:s]
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]"
-  = submit_tag 'Refresh'  
+    = check_box_tag "ratings[#{rating}]", '1', (params[:ratings] && params[:ratings][rating] == '1'), :id => "ratings_#{rating}"
+  = submit_tag 'Refresh', :id => 'ratings_submit'
 
 %table#movies
   %thead
     %tr
       %th{ :class => params[:q] && params[:q].has_key?('s') && params[:q][:s].index('title') ? 'hilite' : '' }
-        = sort_link @q, :title
+        = sort_link @q, :title, 'Movie Title'
       %th Rating
       %th{ :class => params[:q] && params[:q].has_key?('s') && params[:q][:s].index('release_date') ? 'hilite' : '' }
-        = sort_link @q, :release_date
+        = sort_link @q, :release_date, 'Release date'
       %th More Info
   %tbody
     - @movies.each do |movie|
