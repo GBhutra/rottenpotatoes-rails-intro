@@ -12,9 +12,9 @@ class MoviesController < ApplicationController
 
   def index
     #@movies = Movie.all
-    movie = Movie
-    @q = movie.search(params[:q])
+    @q = Movie.all.search params[:q]
     @movies = @q.result(:distinct => true)
+    @all_ratings=Movie::RATINGS 
   end
 
   def new
