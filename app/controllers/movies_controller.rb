@@ -10,8 +10,18 @@ class MoviesController < ApplicationController
   end
 
   def index
+    session[:ratings] = params[:ratings] if params[:ratings]
+    session[:q] = params[:q] if params[:q]
+
+    if (!params[:ratings] && session[:ratings]) || (!params[:q] && session[:q])
+      redirect_to movies_path(ratings: session[:ratings],q: session[:q])
+    end
+
     movie = Movie
-    movie = movie.where('rating in (?)', params[:ratings].keys) if params[:ratings]
+
+    if session[:ratings]
+      movie = movie.where('rating in (?)', params[:ratings].keys) if params[:ratings]
+    end
   
     @q = movie.search params[:q]
     @movies = @q.result(:distinct => true)
