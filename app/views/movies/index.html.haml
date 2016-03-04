@@ -13,7 +13,8 @@ Include:
       %th{ :class => params[:q] && params[:q].has_key?('s') && params[:q][:s].index('title') ? 'hilite' : '' }
         = sort_link @q, :title
       %th Rating
-      %th Release date
+      %th{ :class => params[:q] && params[:q].has_key?('s') && params[:q][:s].index('release_date') ? 'hilite' : '' }
+        = sort_link @q, :release_date
       %th More Info
   %tbody
     - @movies.each do |movie|
